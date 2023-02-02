@@ -22,35 +22,20 @@ public class TeacherController {
 	@Autowired IdService idService;
 	
 	// 강사 삭제
-	@GetMapping("/teacher/removeTeacher")
-	public String removeTeacher(HttpSession session, @RequestParam("teacherNo") int teacherNo) {
-		// 로그인 안되어 있으면
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
+	@GetMapping("/employee/teacher/removeTeacher")
+	public String removeTeacher(@RequestParam("teacherNo") int teacherNo) {
 		teacherService.removeTeacher(teacherNo);
-		return "redirect:/teacher/teacherList";
+		return "redirect:/employee/teacher/teacherList";
 	}
 	
 	// 강사 추가 폼
-	@GetMapping("/teacher/addTeacher")
-	public String addTeacher(HttpSession session) {
-		// 로그인 안되어 있으면
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
+	@GetMapping("/employee/teacher/addTeacher")
+	public String addTeacher() {
 		return "teacher/addTeacher";
 	}
-	// 강사 입력 액션
-	@PostMapping("/teacher/addTeacher")
-	public String addTeacher(HttpSession session, Model model, Teacher teacher) {
-		// 로그인 안되어 있으면
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
+	// 강사 추가 액션
+	@PostMapping("/employee/teacher/addTeacher")
+	public String addTeacher(Model model, Teacher teacher) {
 		// id 중복확인
 		String idCheck = idService.getIdCheck(teacher.getTeacherId());
 		if(idCheck != null) {
@@ -63,19 +48,14 @@ public class TeacherController {
 			model.addAttribute("errorMsg", "입력실패");
 			return "teacher/addTeacher";
 		}
-		return "redirect:/teacher/teacherList";
+		return "redirect:/employee/teacher/teacherList";
 	}
 	// 강사 리스트
-	@GetMapping("/teacher/teacherList")
-	public String teacherList(HttpSession session, Model model
-												, @RequestParam(value="currentPage", defaultValue="1") int currentPage
-												, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage) {
-		// 로그인 안되어 있으면
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
-		
+	@GetMapping("/employee/teacher/teacherList")
+	public String teacherList(Model model
+										, @RequestParam(value="currentPage", defaultValue="1") int currentPage
+										, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage) {
+
 		// 마지막페이지
 		int teachCount = teacherService.teacherCount();
 		int lastPage = teachCount / rowPerPage;

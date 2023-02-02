@@ -21,36 +21,22 @@ public class StudentController {
 	@Autowired StudentService studentService;
 	@Autowired IdService idService;
 	
+	// EmployeeController Start --
 	// 학생 삭제
-	@GetMapping("/student/removeStudent")
-	public String removeStudent(HttpSession session, @RequestParam("studentNo") int studentNo) {
-		// 로그인 안되어 있으면
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
+	@GetMapping("/employee/student/removeStudent")
+	public String removeStudent(@RequestParam("studentNo") int studentNo) {
 		studentService.removeStudent(studentNo);
-		return "redirect:/student/studentList";
+		return "redirect:/employee/student/studentList";
 	}
 	
 	// 학생 추가 폼
-	@GetMapping("/student/addStudent")
+	@GetMapping("/employee/student/addStudent")
 	public String addStudent(HttpSession session) {
-		// 로그인 안되어 있으면
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
 		return "student/addStudent";
 	}
 	// 학생 입력 액션
-	@PostMapping("/student/addStudent")
-	public String addStudent(HttpSession session, Model model, Student student) {
-		// 로그인 안되어 있으면
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
+	@PostMapping("/employee/student/addStudent")
+	public String addStudent(Model model, Student student) {
 		// id 중복확인
 		String idCheck = idService.getIdCheck(student.getStudentId());
 		if(idCheck != null) {
@@ -63,18 +49,13 @@ public class StudentController {
 			model.addAttribute("errorMsg", "입력실패");
 			return "student/addStudent";
 		}
-		return "redirect:/student/studentList";
+		return "redirect:/employee/student/studentList";
 	}
 	// 학생 리스트
-	@GetMapping("/student/studentList")
-	public String teacherList(HttpSession session, Model model
-												, @RequestParam(value="currentPage", defaultValue="1") int currentPage
-												, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage) {
-		// 로그인 안되어 있으면
-		Employee loginEmp = (Employee)session.getAttribute("loginEmp");
-		if(loginEmp == null) {
-			return "redirect:/employee/loginEmp";
-		}
+	@GetMapping("/employee/student/studentList")
+	public String studentList(Model model
+										, @RequestParam(value="currentPage", defaultValue="1") int currentPage
+										, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage) {
 		
 		// 마지막페이지
 		int studentCount = studentService.studentCount();
@@ -89,5 +70,5 @@ public class StudentController {
 		model.addAttribute("lastPage", lastPage);
 		return "student/studentList";
 	}
-	
+	// EmployeeController End --
 }
