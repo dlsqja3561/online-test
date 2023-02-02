@@ -18,9 +18,7 @@ public interface EmployeeMapper {
 	// 추가
 	int insertEmployee(Employee employee);
 	// 마지막페이지
-	int empCount();
+	int empCount(String searchWord);
 	// 리스트
 	List<Employee> selectEmployeeList(Map<String, Object> paramMap);
 }
-
-// public class EmployeeMapperClass implements EmployeeMapper { }

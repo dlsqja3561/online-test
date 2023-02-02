@@ -15,7 +15,7 @@ public interface TeacherMapper {
 	// 강사 추가
 	int insertTeacher(Teacher teacher);
 	// 마지막페이지
-	int teacherCount();
+	int teacherCount(String searchWord);
 	// 강사 리스트
 	List<Teacher> selectTeacherList(Map<String, Object> paramMap);
 }

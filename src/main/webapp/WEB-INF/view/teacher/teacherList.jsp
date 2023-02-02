@@ -28,28 +28,35 @@
 	 		</tr>
 	 	</c:forEach>
 	 </table>
+	 <form method="get" action="${pageContext.request.contextPath}/employee/teacher/teacherList">
+	 	<input type="text" name="searchWord">
+	 	<button type="submit">이름검색</button>
+	 </form>
 	 <div>
 	 	<!-- 처음으로 -->
-	 	<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=1">처음</a>
+	 	<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=1&searchWord=${searchWord}">처음</a>
 	 	<!-- 1페이지에서 이전버튼클릭시 -->
 	 	<c:if test="${currentPage <= 1}">
-	 		<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=1">이전</a>
+	 		<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=1&searchWord=${searchWord}">이전</a>
 	 	</c:if>
 	 	<!-- 이전페이지 -->
 	 	<c:if test="${currentPage > 1}">
-	 		<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=${currentPage-1}">이전</a>
+	 		<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=${currentPage-1}&searchWord=${searchWord}">이전</a>
 	 	</c:if>
-	 	<span>${currentPage} / ${lastPage}</span>
+	 	<!-- startPage ~ endPage -->
+	 	<c:forEach var="s" begin="${startPage}" end="${endPage}" step="1">
+	 		<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=${s}&searchWord=${searchWord}">${s}</a>
+	 	</c:forEach>
 	 	<!-- 다음페이지 -->
 	 	<c:if test="${currentPage < lastPage}">
-	 		<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=${currentPage+1}">다음</a>
+	 		<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=${currentPage+1}&searchWord=${searchWord}">다음</a>
 	 	</c:if>
 	 	<!-- 마지막페이지에서 다음버튼클릭시 -->
 	 	<c:if test="${currentPage >= lastPage}">
-	 		<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=${lastPage}">다음</a>
+	 		<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=${lastPage}&searchWord=${searchWord}">다음</a>
 	 	</c:if>
 	 	<!-- 마지막으로 -->
-	 	<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=${lastPage}">마지막</a>
+	 	<a href="${pageContext.request.contextPath}/employee/teacher/teacherList?currentPage=${lastPage}&searchWord=${searchWord}">마지막</a>
 	 </div>
 </body>
 </html>

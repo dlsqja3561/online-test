@@ -15,7 +15,7 @@ public interface StudentMapper {
 	// 학생 추가
 	int insertStudent(Student student);
 	// 마지막페이지
-	int studentCount();
+	int studentCount(String searchWord);
 	// 학생 리스트
 	List<Student> selectStudentList(Map<String, Object> paramMap);
 }

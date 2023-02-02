@@ -43,16 +43,17 @@ public class EmployeeService {
 	}
 	
 	// 마지막페이지
-	public int empCount() {
-		return employeeMapper.empCount();
+	public int empCount(String searchWord) {
+		return employeeMapper.empCount(searchWord);
 	}
 	
 	// emp 리스트
-	public List<Employee> getEmployeeList(int currentPage, int rowPerPage) {
+	public List<Employee> getEmployeeList(int currentPage, int rowPerPage, String searchWord) {
 		int beginRow = (currentPage - 1) * rowPerPage;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("beginRow", beginRow);
 		paramMap.put("rowPerPage", rowPerPage);
+		paramMap.put("searchWord", searchWord);
 		return employeeMapper.selectEmployeeList(paramMap);
 	}
 }

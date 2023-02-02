@@ -27,16 +27,17 @@ public class TeacherService {
 	}
 	
 	// 마지막페이지
-	public int teacherCount() {
-		return teacherMapper.teacherCount();
+	public int teacherCount(String searchWord) {
+		return teacherMapper.teacherCount(searchWord);
 	}
 	
 	// 강사 리스트
-	public List<Teacher> getTeacherList(int currentPage, int rowPerPage) {
+	public List<Teacher> getTeacherList(int currentPage, int rowPerPage, String searchWord) {
 		int beginRow = (currentPage - 1) * rowPerPage;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("beginRow", beginRow);
 		paramMap.put("rowPerPage", rowPerPage);
+		paramMap.put("searchWord", searchWord);
 		return teacherMapper.selectTeacherList(paramMap);
 	}
 }

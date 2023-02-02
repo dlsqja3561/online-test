@@ -38,8 +38,13 @@
 	</insert>
 	
 	<!-- 마지막페이지 -->
-	<select id="empCount" resultType="int">
+	<select id="empCount" resultType="int" parameterType="String">
 		SELECT COUNT(*) FROM employee
+		<where>
+			<if test="searchWord != null || searchWord != ''">
+				emp_name LIKE CONCAT('%',#{searchWord},'%')
+			</if>
+		</where>
 	</select>
 	
 	<!-- 리스트 -->
@@ -49,6 +54,11 @@
 			, emp_id empId
 			, emp_name empName
 		FROM employee
+		<where>
+			<if test="searchWord != null || searchWord != ''">
+				emp_name LIKE CONCAT('%',#{searchWord},'%')
+			</if>
+		</where>
 		ORDER BY emp_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>

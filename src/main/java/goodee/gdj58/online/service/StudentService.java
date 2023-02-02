@@ -26,16 +26,17 @@ public class StudentService {
 	}
 	
 	// 마지막페이지
-	public int studentCount() {
-		return studentMapper.studentCount();
+	public int studentCount(String searchWord) {
+		return studentMapper.studentCount(searchWord);
 	}
 	
 	// 학생 리스트
-	public List<Student> getStudentList(int currentPage, int rowPerPage) {
+	public List<Student> getStudentList(int currentPage, int rowPerPage, String searchWord) {
 		int beginRow = (currentPage - 1) * rowPerPage;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("beginRow", beginRow);
 		paramMap.put("rowPerPage", rowPerPage);
+		paramMap.put("searchWord", searchWord);
 		return studentMapper.selectStudentList(paramMap);
 	}
 }
