@@ -2,6 +2,100 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="goodee.gdj58.online.mapper.TeacherMapper">
 
+	<!-- 문제 등록 -->
+	<insert id="insertQuestion" parameterType="java.util.Map">
+		INSERT INTO question (test_no, question_idx, question_title)
+		VALUES (#{testNo}, #{questionIdx}, #{questionTitle})
+	</insert>
+	
+	<!-- 문제 삭제 -->
+	<delete id="deleteQuestion" parameterType="int">
+		DELETE FROM question
+		WHERE question_no = #{questionNo}
+	</delete>
+	
+	<!-- 문제 제목 수정 -->
+	<update id="updateQuestionTitle" parameterType="java.util.Map">
+		UPDATE question
+		SET question_title = #{newTitle}
+		WHERE question_no = #{questionNo}
+	</update>
+
+	<!-- 문제 리스트 -->
+	<select id="selectQuestionList" parameterType="int" resultType="java.util.Map">
+		SELECT q.question_no questionNo
+				, q.test_no testNo
+				, q.question_idx questionIdx
+				, q.question_title questionTitle
+				, e.question_no exampleCk
+		FROM question q
+			LEFT OUTER JOIN example e ON q.question_no = e.question_no
+		WHERE q.test_no = #{testNo}
+		ORDER BY q.question_idx ASC
+	</select>
+
+	<!-- 시험 등록 -->
+	<insert id="insertTest" parameterType="String">
+		INSERT INTO test (test_title, test_date)
+		VALUES (#{testTitle}, CURDATE())
+	</insert>
+	
+	<!-- 시험 삭제 -->
+	<delete id="deleteTest" parameterType="int">
+		DELETE FROM test
+		WHERE test_no = #{testNo}
+	</delete>
+	
+	<!-- 시험 제목 수정 -->
+	<update id="updateTestTitle" parameterType="java.util.Map">
+		UPDATE test
+		SET test_title = #{newTitle}
+		WHERE test_no = #{testNo}
+	</update>
+	
+	<!-- 시험 리스트 마지막페이지 -->
+	<select id="testCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM test
+		<where>
+			<if test="searchWord != null || searchWord != ''">
+				test_title LIKE CONCAT('%',#{searchWord},'%')
+			</if>
+		</where>
+	</select>
+
+	<!-- 시험 리스트 -->
+	<select id="selectTestList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT t.test_no testNo
+				, t.test_title testTitle
+				, t.test_date testDate
+				, q.test_no questionCk
+		FROM test t 
+			LEFT OUTER JOIN question q ON t.test_no = q.test_no
+		<where>
+			<if test="searcWord != null || searchWord != ''">
+				test_title LIKE CONCAT('%',#{searchWord},'%')
+			</if>
+		</where>
+		ORDER BY t.test_no DESC
+		LIMIT #{beginRow}, #{rowPerPage}
+	</select>
+	
+	<!-- 강사 비밀번호 수정 -->
+	<update id="updateTeacherPw" parameterType="java.util.Map">
+		UPDATE teacher
+		SET teacher_pw = PASSWORD(#{newPw})
+		WHERE teacher_no = #{teacherNo} AND teacher_pw = PASSWORD(#{oldPw})
+	</update>
+	
+	<!-- 강사 로그인 -->
+	<select id="teacherLogin" resultType="goodee.gdj58.online.vo.Teacher" parameterType="goodee.gdj58.online.vo.Teacher">
+		SELECT teacher_no teacherNo
+				, teacher_id teacherId
+				, teacher_name teacherName
+		FROM teacher
+		WHERE teacher_id = #{teacherId} AND teacher_pw = PASSWORD(#{teacherPw})
+	</select>
+
 	<!-- 강사 삭제 -->
 	<delete id="deleteTeacher" parameterType="int">
 		DELETE FROM teacher
@@ -21,8 +115,8 @@
 		)
 	</insert>
 	
-	<!-- 마지막페이지 -->
-	<select id="teacherCount" resultType="int" parameterType="String">
+	<!-- 강사 리스트 마지막페이지 -->
+	<select id="teacherCount" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM teacher
 		<where>
 			<if test="searchWord != null || searchWord != ''">
@@ -46,4 +140,5 @@
 		ORDER BY teacher_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>
+	
 </mapper>

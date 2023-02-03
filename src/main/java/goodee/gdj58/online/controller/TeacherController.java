@@ -1,6 +1,7 @@
 package goodee.gdj58.online.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import goodee.gdj58.online.service.IdService;
 import goodee.gdj58.online.service.TeacherService;
-import goodee.gdj58.online.vo.Employee;
+import goodee.gdj58.online.vo.Question;
 import goodee.gdj58.online.vo.Teacher;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +23,129 @@ import lombok.extern.slf4j.Slf4j;
 public class TeacherController {
 	@Autowired TeacherService teacherService;
 	@Autowired IdService idService;
+	
+	// 문제 리스트
+	@GetMapping("/teacher/questionList")
+	public String QuestionList(Model model, @RequestParam(value="testNo") int testNo) {
+		log.debug("\u001B[31m"+"/teacher/questionLis");
+		List<Map<String, Object>> list = teacherService.getQuestionList(testNo);
+		model.addAttribute("list", list);
+		return "teacher/questionList";
+	}
+	
+	// 시험 등록 폼
+	@GetMapping("/teacher/addTest")
+	public String addTest() {
+		log.debug("\u001B[31m"+"/teacher/addTest Form");
+		return "teacher/addTest";
+	}
+	// 시험 등록 액션
+	@PostMapping("/teacher/addTest")
+	public String addTest(@RequestParam(value="testTitle") String testTitle) {
+		log.debug("\u001B[31m"+testTitle+" <- testTitle");
+		teacherService.addTest(testTitle);
+		return "redirect:/teacher/testList";
+	}
+	
+	// 시험 삭제
+	@GetMapping("/teacher/removeTest")
+	public String removeTest(@RequestParam(value="testNo") int testNo) {
+		log.debug("\u001B[31m"+testNo+" <- testNo");
+		teacherService.removeTest(testNo);
+		return "redirect:/teacher/testList";
+	}
+	// 시험 제목 수정 폼
+	@GetMapping("/teacher/modifyTestTitle")
+	public String modifyTestTitle(Model model, @RequestParam(value="testNo") int testNo) {
+		log.debug("\u001B[31m"+"/teacher/modifyTestTitle Form");
+		model.addAttribute("testNo", testNo);
+		return "teacher/modifyTestTitle";
+	}
+	// 시험 제목 수정 액션
+	@PostMapping("/teacher/modifyTestTitle")
+	public String modifyTestTitle(@RequestParam(value="testNo") int testNo, @RequestParam(value="newTitle") String newTitle) {
+		log.debug("\u001B[31m"+testNo+" <- testNo");
+		log.debug("\u001B[31m"+newTitle+" <- newTitle");
+		teacherService.modifyTestTitle(testNo, newTitle);
+		return "redirect:/teacher/testList";
+	}
+	
+	// 강사 리스트
+	@GetMapping("/teacher/testList")
+	public String testList(Model model
+										, @RequestParam(value="currentPage", defaultValue="1") int currentPage
+										, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage
+										, @RequestParam(value="searchWord", defaultValue="") String searchWord) {
+		// 마지막페이지
+		int testCount = teacherService.testCount(searchWord);
+		int lastPage = testCount / rowPerPage;
+		if(testCount % rowPerPage != 0) {
+			lastPage +=1;
+		}
+		// startPage
+		int startPage = currentPage - (currentPage % 10) + 1;
+		// endPage
+		int endPage = startPage+9;
+		if(endPage > lastPage) {
+			endPage = lastPage;
+		}
+		log.debug("\u001B[31m"+currentPage+" <- currentPage");
+		log.debug("\u001B[31m"+rowPerPage+" <- rowPerPage");
+		log.debug("\u001B[31m"+searchWord+" <- searchWord");
+		log.debug("\u001B[31m"+lastPage+" <- lastPage");
+		log.debug("\u001B[31m"+startPage+" <- startPage");
+		log.debug("\u001B[31m"+endPage+" <- endPage");
+		// 리스트
+		List<Map<String, Object>> list = teacherService.getTestList(currentPage, rowPerPage, searchWord);
+		model.addAttribute("list", list);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("searchWord", searchWord);
+		return "teacher/testList";
+	}
+	
+	// 강사 비밀번호 수정 폼
+	@GetMapping("/teacher/modifyTeacherPw")
+	public String modifyTeacherPw() {
+		log.debug("\u001B[31m"+"/teacher/modifyTeacherPw Form");
+		return "teacher/modifyTeacherPw";
+	}
+	// 강사 비밀번호 수정 액션
+	@PostMapping("/teacher/modifyTeacherPw")
+	public String modifyTeacher(HttpSession session, @RequestParam(value="oldPw") String oldPw, @RequestParam(value="newPw") String newPw) {
+		log.debug("\u001B[31m"+oldPw+" <- oldPw");
+		log.debug("\u001B[31m"+newPw+" <- newPw");
+		Teacher loginTeacher = (Teacher)session.getAttribute("loginTeacher");
+		teacherService.modifyTeacherPw(loginTeacher.getTeacherNo(), oldPw, newPw);
+		return "redirect:/teacher/testList";
+	}
+	
+	// 강사 로그아웃
+	@GetMapping("/teacher/teacherLogout")
+	public String teacherLogout(HttpSession session) {
+		log.debug("\u001B[31m"+"/teacher/teacherLogout");
+		session.invalidate();
+		return "redirect:/teacher/loginTeacher";
+	}
+	
+	// 강사 로그인 폼
+	@GetMapping("/loginTeacher")
+	public String loginTeacher() {
+		log.debug("\u001B[31m"+"loginTeacher Form");
+		return "teacher/loginTeacher";
+	}
+	// 강사 로그인 액션
+	@PostMapping("/loginTeacher")
+	public String loginTeacher(HttpSession session, Teacher teacher) {
+		log.debug("\u001B[31m"+teacher+" <- teacher");
+		Teacher resultTeacher = teacherService.teacherLogin(teacher);
+		session.setAttribute("loginTeacher", resultTeacher);
+		return "redirect:/teacher/testList";
+	}
+	// TeachController(강사 기능) End --
+	
 	
 	// EmployeeController(관리자 기능) Start --
 	// 강사 삭제
@@ -35,7 +159,7 @@ public class TeacherController {
 	// 강사 추가 폼
 	@GetMapping("/employee/teacher/addTeacher")
 	public String addTeacher() {
-		log.debug("/employee/teacher/addTeacher form");
+		log.debug("\u001B[31m"+"/employee/teacher/addTeacher form");
 		return "teacher/addTeacher";
 	}
 	// 강사 추가 액션
@@ -70,7 +194,7 @@ public class TeacherController {
 			lastPage +=1;
 		}
 		// startPage
-		int startPage = currentPage - (currentPage - 1) % 10;
+		int startPage = currentPage - (currentPage % 10) + 1;
 		// endPage
 		int endPage = startPage+9;
 		if(endPage > lastPage) {
@@ -79,6 +203,7 @@ public class TeacherController {
 		log.debug("\u001B[31m"+currentPage+" <- currentPage");
 		log.debug("\u001B[31m"+rowPerPage+" <- rowPerPage");
 		log.debug("\u001B[31m"+searchWord+" <- searchWord");
+		log.debug("\u001B[31m"+lastPage+" <- lastPage");
 		log.debug("\u001B[31m"+startPage+" <- startPage");
 		log.debug("\u001B[31m"+endPage+" <- endPage");
 		// 리스트

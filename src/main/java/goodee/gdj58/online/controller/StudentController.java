@@ -70,7 +70,7 @@ public class StudentController {
 			lastPage +=1;
 		}
 		// startPage
-		int startPage = currentPage - (currentPage - 1) % 10;
+		int startPage = currentPage - (currentPage % 10) + 1;
 		// endPage
 		int endPage = startPage+9;
 		if(endPage > lastPage) {
@@ -80,6 +80,7 @@ public class StudentController {
 		log.debug("\u001B[31m"+currentPage+" <- currentPage");
 		log.debug("\u001B[31m"+rowPerPage+" <- rowPerPage");
 		log.debug("\u001B[31m"+searchWord+" <- searchWord");
+		log.debug("\u001B[31m"+lastPage+" <- lastPage");
 		log.debug("\u001B[31m"+startPage+" <- startPage");
 		log.debug("\u001B[31m"+endPage+" <- endPage");
 		
