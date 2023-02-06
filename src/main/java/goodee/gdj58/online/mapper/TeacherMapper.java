@@ -5,12 +5,20 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import goodee.gdj58.online.vo.Question;
+import goodee.gdj58.online.vo.Example;
 import goodee.gdj58.online.vo.Teacher;
 
 @Mapper
 public interface TeacherMapper {
 
+	// 보기 삭제
+	int deleteExample(int exampleNo);
+	// 보기 수정
+	int updateExampleTitle(Map<String, Object> paramMap);
+	// 보기 등록
+	int insertExample(Example example);
+	// 보기 리스트
+	List<Map<String, Object>> selectExampleList(int questionNo);
 	// 문제 등록
 	int insertQuestion(Map<String, Object> paramMap);
 	// 문제 삭제

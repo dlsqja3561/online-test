@@ -2,6 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="goodee.gdj58.online.mapper.TeacherMapper">
 
+	<!-- 보기 삭제 -->
+	<delete id="deleteExample" parameterType="int">
+		DELETE FROM example
+		WHERE example_no = #{exampleNo}
+	</delete>
+	
+	<!-- 보기 수정 -->
+	<update id="updateExampleTitle" parameterType="java.util.Map">
+		UPDATE example
+		SET example_title = #{newTitle}
+		WHERE example_no = #{exampleNo}
+	</update>
+
+	<!-- 보기 등록 -->
+	<insert id="insertExample" parameterType="goodee.gdj58.online.vo.Example">
+		INSERT INTO example (question_no, example_idx, example_title, example_ox)
+		VALUES (#{questionNo}, #{exampleIdx}, #{exampleTitle}, #{exampleOx})
+	</insert>
+	
+	<!-- 보기 리스트 -->
+	<select id="selectExampleList" parameterType="int" resultType="java.util.Map">
+	SELECT e.example_no exampleNo
+			, e.question_no questionNo
+			, e.example_idx exampleIdx
+			, e.example_title exampleTitle
+			, e.example_ox exampleOx
+			, p.question_no studentCk
+	FROM example e
+				LEFT OUTER JOIN paper p ON e.question_no = p.question_no
+	WHERE e.question_no = #{questionNo}
+	GROUP BY e.example_idx
+	ORDER BY e.example_idx ASC
+	</select>
+	
 	<!-- 문제 등록 -->
 	<insert id="insertQuestion" parameterType="java.util.Map">
 		INSERT INTO question (test_no, question_idx, question_title)
@@ -31,6 +65,7 @@
 		FROM question q
 			LEFT OUTER JOIN example e ON q.question_no = e.question_no
 		WHERE q.test_no = #{testNo}
+		GROUP BY questionIdx
 		ORDER BY q.question_idx ASC
 	</select>
 
@@ -76,6 +111,7 @@
 				test_title LIKE CONCAT('%',#{searchWord},'%')
 			</if>
 		</where>
+		GROUP BY testNo
 		ORDER BY t.test_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
 	</select>

@@ -7,13 +7,16 @@
 <title></title>
 </head>
 <body>
-	<h1>시험 제목 수정</h1>
-	<form method="post" action="${pageContext.request.contextPath}/teacher/modifyTestTitle">
-		<input type="hidden" name="testNo" value="${testNo}">
+	<h1>${loginStudent.studentName}님 비밀번호 수정</h1>
+	<form method="post" action="${pageContext.request.contextPath}/student/modifyStudentPw">
 		<table border="1">
 			<tr>
-				<td>새로운 제목</td>
-				<td><input type="text" value="${testTitle}" name="newTitle"></td>
+				<td>현재 비밀번호</td>
+				<td><input type="password" name="oldPw"></td>
+			</tr>
+			<tr>
+				<td>새로운 비밀번호</td>
+				<td><input type="password" name="newPw"></td>
 			</tr>
 		</table>
 		<button type="submit">수정</button>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,44 +8,35 @@
 <title></title>
 </head>
 <body>
-	<!-- teacherMenu include -->
+	<!-- studentMenu include -->
 	<div>
-		<c:import url="/WEB-INF/view/teacher/inc/teacherMenu.jsp"></c:import>
+		<c:import url="/WEB-INF/view/student/inc/studentMenu.jsp"></c:import>
 	</div>
-	
-	<!-- 시험등록 폼 -->
-	<h1>시험등록</h1>
-	<form method="post" action="${pageContext.request.contextPath}/teacher/addTest">
-		<table border="1">
-			<tr>
-				<td>testTitle</td>
-				<td><input type="text" name="testTitle"></td>
-			</tr>
-		</table>
-	<button type="submit">시험등록</button>
-	</form>
 	
 	<!-- 시험 리스트 -->
 	<h1>test List</h1>
-	<a href="${pageContext.request.contextPath}/teacher/addTest">시험등록</a>
 	<table border="1">
 		<tr>
 			<th>testTitle</th>
 			<th>testDate</th>
-			<th>수정 / 삭제</th>
+			<th>응시현황</th>
 		</tr>
 		<c:forEach var="e" items="${list}">
 			<tr>
-				<td><a href="${pageContext.request.contextPath}/teacher/questionList?testNo=${e.testNo}">${e.testTitle}</a></td>
+				<td>${e.testTitle}</td>
 				<td>${e.testDate}</td>
 				<td>
-					<!-- 문제가 등록되어 있으면 삭제버튼 안보이게 -->
-					<c:if test="${e.questionCk eq null}">
-						<a href="${pageContext.request.contextPath}/teacher/modifyTestTitle?testNo=${e.testNo}&testTitle=${e.testTitle}">수정</a> /
-						<a href="${pageContext.request.contextPath}/teacher/removeTest?testNo=${e.testNo}">삭제</a>
+					<!-- 응시현황 -->
+					<c:if test="${e.paperAnser eq null}">
+						<span>미응시</span>
 					</c:if>
 					<c:if test="${e.questionCk ne null}">
-						<span>수정/삭제 불가</span>
+						<a href="${pageContext.request.contextPath}/student/studentTestOne?testNo=${e.testNo}">응시완료</a>
+					</c:if>
+					<!-- 날짜 비교위해 타입변경 -->
+					<fmt:formatDate var="testDate" value="${e.testDate}" pattern="yyyy-MM-dd"/>
+					<c:if test="${testDate == date && e.paperAnser eq null}">
+						<a href="${pageContext.request.contextPath}/student/studentTestPaper?testNo=${e.testNo}">응시하기</a>
 					</c:if>
 				</td>
 			</tr>
@@ -52,7 +44,7 @@
 	</table>
 	<form method="get" action="${pageContext.request.contextPath}/teacher/testList">
 		<input type="text" name="searchWord">
-		<button type="submit">제목검색</button>
+		<button type="submit">검색</button>
 	</form>
 	<div>
 		<!-- 처음으로 -->

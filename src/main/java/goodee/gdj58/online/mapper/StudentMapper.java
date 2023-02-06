@@ -10,6 +10,16 @@ import goodee.gdj58.online.vo.Student;
 @Mapper
 public interface StudentMapper {
 
+	// 학생 시험응시 문제 리스트
+	List<Map<String, Object>> selectStudentTestQuestionExampleList(Map<String, Object> paramMap); 
+	// 시험 리스트 카운트
+	int studentTestCount(String searchWord);
+	// 학생 시험 리스트
+	List<Map<String, Object>> selectStudentTestList(Map<String, Object> paramMap);
+	// 학생 비밀번호 수정
+	int updateStudentPw(Map<String, Object> paramMap);
+	// 학생 로그인
+	Student studentLogin(Student student);
 	// 학생 삭제
 	int deleteStudent(int studentNo);
 	// 학생 추가

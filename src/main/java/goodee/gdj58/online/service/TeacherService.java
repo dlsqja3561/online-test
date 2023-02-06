@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import goodee.gdj58.online.mapper.TeacherMapper;
-import goodee.gdj58.online.vo.Question;
+import goodee.gdj58.online.vo.Example;
 import goodee.gdj58.online.vo.Teacher;
 
 @Service
@@ -17,6 +17,55 @@ import goodee.gdj58.online.vo.Teacher;
 public class TeacherService {
 	@Autowired
 	private TeacherMapper teacherMapper;
+	
+	// 보기 삭제 
+	public int removeExample(int exampleNo) {
+		return teacherMapper.deleteExample(exampleNo);
+	}
+	
+	// 보기 수정
+	public int modifyExampleTitle(int exampleNo, String newTitle) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("exampleNo", exampleNo);
+		paramMap.put("newTitle", newTitle);
+		return teacherMapper.updateExampleTitle(paramMap);
+	}
+	
+	// 보기 등록
+	public int addExample(int questionNo, int exampleIdx, String exampleTitle, String exampleOx) {
+		Example example = new Example();
+		example.setQuestionNo(questionNo);
+		example.setExampleIdx(exampleIdx);
+		example.setExampleTitle(exampleTitle);
+		example.setExampleOx(exampleOx);
+		return teacherMapper.insertExample(example);
+	}
+	
+	// 보기 리스트
+	public List<Map<String, Object>> getExampleList(int questionNo) {
+		return teacherMapper.selectExampleList(questionNo);
+	}
+	// 문제 등록
+	public int addQuestion(int testNo, int questionIdx, String questionTitle) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("testNo", testNo);
+		paramMap.put("questionIdx", questionIdx);
+		paramMap.put("questionTitle", questionTitle);
+		return teacherMapper.insertQuestion(paramMap);
+	}
+	
+	// 문제 삭제 
+	public int removeQuestion(int questionNo) {
+		return teacherMapper.deleteQuestion(questionNo);
+	}
+	
+	// 문제 제목 수정
+	public int modifyQuestionTitle(int questionNo, String newTitle) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("questionNo", questionNo);
+		paramMap.put("newTitle", newTitle);
+		return teacherMapper.updateQuestionTitle(paramMap);
+	}
 	
 	// 문제 리스트
 	public List<Map<String, Object>> getQuestionList(int testNo) {

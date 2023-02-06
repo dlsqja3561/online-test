@@ -24,7 +24,7 @@
 				<td><input type="text" name="teacherName"></td>
 			</tr>   
 		</table>
-	<button type="submit">강사추가</button>
+		<button type="submit">강사추가</button>
 	</form>
 </body>
 </html>

@@ -8,5 +8,5 @@
 	<a href="${pageContext.request.contextPath}/"></a>
 	
 	<a href="${pageContext.request.contextPath}/student/modifyStudentPw">비밀번호수정</a>
-	<a href="${pageContext.request.contextPath}/student/logout">로그아웃</a>
+	<a href="${pageContext.request.contextPath}/student/studentLogout">로그아웃</a>
 </div>

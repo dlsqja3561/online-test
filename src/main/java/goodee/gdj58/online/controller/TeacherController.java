@@ -11,10 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import goodee.gdj58.online.service.IdService;
 import goodee.gdj58.online.service.TeacherService;
-import goodee.gdj58.online.vo.Question;
 import goodee.gdj58.online.vo.Teacher;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,21 +24,137 @@ public class TeacherController {
 	@Autowired TeacherService teacherService;
 	@Autowired IdService idService;
 	
+	// 보기 삭제
+	@GetMapping("/teacher/removeExample")
+	public String removeExample(RedirectAttributes re
+									, @RequestParam(value="questionNo") int questionNo
+									, @RequestParam(value="exampleNo") int exampleNo) {
+		log.debug("\u001B[31m"+questionNo+" <- questionNo");
+		log.debug("\u001B[31m"+exampleNo+" <- exampleNo");
+		teacherService.removeExample(exampleNo);
+		re.addAttribute("questionNo", questionNo);
+		return "redirect:/teacher/exampleList";
+	}
+	
+	// 보기 수정 폼
+	@GetMapping("/teacher/modifyExampleTitle")
+	public String modifyExampleTitle(Model model
+										, @RequestParam(value="questionNo") int questionNo
+										, @RequestParam(value="exampleNo") int exampleNo
+										, @RequestParam(value="exampleTitle") String exampleTitle) {
+		log.debug("\u001B[31m"+"/teacher/modifyQuestionTitle Form");
+		model.addAttribute("questionNo", questionNo);
+		model.addAttribute("exampleNo", exampleNo);
+		model.addAttribute("exampleTitle", exampleTitle);
+		return "teacher/modifyExampleTitle";
+	}
+	// 보기 수정 액션
+	@PostMapping("/teacher/modifyExampleTitle")
+	public String modifyExampleTitle(RedirectAttributes re
+										, @RequestParam(value="questionNo") int questionNo
+										, @RequestParam(value="newTitle") String newTitle
+										, @RequestParam(value="exampleNo") int exampleNo) {
+		log.debug("\u001B[31m"+questionNo+" <- questionNo");
+		log.debug("\u001B[31m"+newTitle+" <- newTitle");
+		log.debug("\u001B[31m"+exampleNo+" <- exampleNo");
+		teacherService.modifyExampleTitle(exampleNo, newTitle);
+		re.addAttribute("questionNo", questionNo);
+		return "redirect:/teacher/exampleList";
+	}
+	
+	// 보기 등록 액션
+	@PostMapping("/teacher/addExample")
+	public String addExample(Model model, RedirectAttributes re
+											, @RequestParam(value="questionNo") int questionNo
+											, @RequestParam(value="exampleIdx") int exampleIdx
+											, @RequestParam(value="exampleTitle") String exampleTitle
+											, @RequestParam(value="exampleOx") String exampleOx) {
+		log.debug("\u001B[31m"+questionNo+" <- questionNo");
+		log.debug("\u001B[31m"+exampleIdx+" <- exampleIdx");
+		log.debug("\u001B[31m"+exampleTitle+" <- exampleTitle");
+		log.debug("\u001B[31m"+exampleOx+" <- exampleOx");
+		teacherService.addExample(questionNo, exampleIdx, exampleTitle, exampleOx);
+		re.addAttribute("questionNo", questionNo);
+		return "redirect:/teacher/exampleList";
+	}
+	
+	// 보기 리스트
+	@GetMapping("/teacher/exampleList")
+	public String ExampleList(Model model
+								, @RequestParam(value="questionNo") int questionNo
+								, @RequestParam(value="questionTitle") String questionTitle
+								, @RequestParam(value="questionIdx") int questionIdx) {
+		log.debug("\u001B[31m"+"/teacher/exampleList");
+		List<Map<String, Object>> list = teacherService.getExampleList(questionNo);
+		model.addAttribute("list", list);
+		model.addAttribute("questionNo", questionNo);
+		model.addAttribute("questionTitle", questionTitle);
+		model.addAttribute("questionIdx", questionIdx);
+		return "teacher/exampleList";
+	}
+	
+	// 문제 등록 액션
+	@PostMapping("/teacher/addQuestion")
+	public String addQuestion(Model model, RedirectAttributes re
+											, @RequestParam(value="testNo") int testNo
+											, @RequestParam(value="questionIdx") int questionIdx
+											, @RequestParam(value="questionTitle") String questionTitle) {
+		log.debug("\u001B[31m"+testNo+" <- testNo");
+		log.debug("\u001B[31m"+questionIdx+" <- questionIdx");
+		log.debug("\u001B[31m"+questionTitle+" <- questionTitle");
+		teacherService.addQuestion(testNo, questionIdx, questionTitle);
+		re.addAttribute("testNo", testNo); // redirect시 파라미터값 넘기기
+		return "redirect:/teacher/questionList";
+	}
+	
+	// 문제 삭제
+	@GetMapping("/teacher/removeQuestion")
+	public String removeQuestion(RedirectAttributes re
+									, @RequestParam(value="questionNo") int questionNo
+									, @RequestParam(value="testNo") int testNo) {
+		log.debug("\u001B[31m"+questionNo+" <- questionNo");
+		log.debug("\u001B[31m"+testNo+" <- testNo");
+		teacherService.removeQuestion(questionNo);
+		re.addAttribute("testNo", testNo);
+		return "redirect:/teacher/questionList";
+	}
+	
+	// 문제 제목 수정 폼
+	@GetMapping("/teacher/modifyQuestionTitle")
+	public String modifyQuestionTitle(Model model
+										, @RequestParam(value="questionNo") int questionNo
+										, @RequestParam(value="testNo") int testNo
+										, @RequestParam(value="questionTitle") String questionTitle) {
+		log.debug("\u001B[31m"+"/teacher/modifyQuestionTitle Form");
+		model.addAttribute("questionNo", questionNo);
+		model.addAttribute("testNo", testNo);
+		model.addAttribute("questionTitle", questionTitle);
+		return "teacher/modifyQuestionTitle";
+	}
+	// 문제 제목 수정 액션
+	@PostMapping("/teacher/modifyQuestionTitle")
+	public String modifyQuestionTitle(RedirectAttributes re
+										, @RequestParam(value="questionNo") int questionNo
+										, @RequestParam(value="newTitle") String newTitle
+										, @RequestParam(value="testNo") int testNo) {
+		log.debug("\u001B[31m"+questionNo+" <- questionNo");
+		log.debug("\u001B[31m"+newTitle+" <- newTitle");
+		log.debug("\u001B[31m"+testNo+" <- testNo");
+		teacherService.modifyQuestionTitle(questionNo, newTitle);
+		re.addAttribute("testNo", testNo);
+		return "redirect:/teacher/questionList";
+	}
+	
 	// 문제 리스트
 	@GetMapping("/teacher/questionList")
 	public String QuestionList(Model model, @RequestParam(value="testNo") int testNo) {
 		log.debug("\u001B[31m"+"/teacher/questionLis");
 		List<Map<String, Object>> list = teacherService.getQuestionList(testNo);
 		model.addAttribute("list", list);
+		model.addAttribute("testNo", testNo);
 		return "teacher/questionList";
 	}
 	
-	// 시험 등록 폼
-	@GetMapping("/teacher/addTest")
-	public String addTest() {
-		log.debug("\u001B[31m"+"/teacher/addTest Form");
-		return "teacher/addTest";
-	}
 	// 시험 등록 액션
 	@PostMapping("/teacher/addTest")
 	public String addTest(@RequestParam(value="testTitle") String testTitle) {
@@ -54,11 +170,13 @@ public class TeacherController {
 		teacherService.removeTest(testNo);
 		return "redirect:/teacher/testList";
 	}
+	
 	// 시험 제목 수정 폼
 	@GetMapping("/teacher/modifyTestTitle")
-	public String modifyTestTitle(Model model, @RequestParam(value="testNo") int testNo) {
+	public String modifyTestTitle(Model model, @RequestParam(value="testNo") int testNo, @RequestParam(value="testTitle") String testTitle) {
 		log.debug("\u001B[31m"+"/teacher/modifyTestTitle Form");
 		model.addAttribute("testNo", testNo);
+		model.addAttribute("testTitle", testTitle);
 		return "teacher/modifyTestTitle";
 	}
 	// 시험 제목 수정 액션
@@ -70,7 +188,7 @@ public class TeacherController {
 		return "redirect:/teacher/testList";
 	}
 	
-	// 강사 리스트
+	// 시험 리스트
 	@GetMapping("/teacher/testList")
 	public String testList(Model model
 										, @RequestParam(value="currentPage", defaultValue="1") int currentPage

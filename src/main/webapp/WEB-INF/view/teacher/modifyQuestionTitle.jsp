@@ -7,13 +7,14 @@
 <title></title>
 </head>
 <body>
-	<h1>시험 제목 수정</h1>
-	<form method="post" action="${pageContext.request.contextPath}/teacher/modifyTestTitle">
+	<h1>문제 제목 수정</h1>
+	<form method="post" action="${pageContext.request.contextPath}/teacher/modifyQuestionTitle">
 		<input type="hidden" name="testNo" value="${testNo}">
+		<input type="hidden" name="questionNo" value="${questionNo}">
 		<table border="1">
 			<tr>
-				<td>새로운 제목</td>
-				<td><input type="text" value="${testTitle}" name="newTitle"></td>
+				<td>변경할 문제 제목</td>
+				<td><input type="text" value="${questionTitle}" name="newTitle"></td>
 			</tr>
 		</table>
 		<button type="submit">수정</button>
