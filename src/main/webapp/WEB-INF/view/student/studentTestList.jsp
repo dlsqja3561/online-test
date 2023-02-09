@@ -30,14 +30,15 @@
 					<c:if test="${e.paperAnser eq null}">
 						<span>미응시</span>
 					</c:if>
-					<c:if test="${e.questionCk ne null}">
+					<c:if test="${e.paperAnser ne null}">
 						<a href="${pageContext.request.contextPath}/student/studentTestOne?testNo=${e.testNo}">응시완료</a>
 					</c:if>
 					<!-- 날짜 비교위해 타입변경 -->
 					<fmt:formatDate var="testDate" value="${e.testDate}" pattern="yyyy-MM-dd"/>
 					<c:if test="${testDate == date && e.paperAnser eq null}">
-						<a href="${pageContext.request.contextPath}/student/studentTestPaper?testNo=${e.testNo}">응시하기</a>
+						<a href="${pageContext.request.contextPath}/student/studentTestQuestionList?testNo=${e.testNo}&testTitle=${e.testTitle}">응시하기</a>
 					</c:if>
+					<a href="${pageContext.request.contextPath}/student/studentTestQuestionList?testNo=${e.testNo}&testTitle=${e.testTitle}">응시하기</a>
 				</td>
 			</tr>
 		</c:forEach>

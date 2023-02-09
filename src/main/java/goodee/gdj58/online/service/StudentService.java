@@ -9,12 +9,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import goodee.gdj58.online.mapper.StudentMapper;
+import goodee.gdj58.online.vo.Paper;
 import goodee.gdj58.online.vo.Student;
 @Service
 @Transactional
 public class StudentService {
 	@Autowired
 	private StudentMapper studentMapper;
+	
+	// 학생 시험응시 문제 답안 입력
+	public int addAnswer(Paper paper) {
+		return studentMapper.insertAnswer(paper);
+	}
+	
+	// 학생 시험응시 보기 리스트
+	public List<Map<String, Object>> getStruentTestExampleList(int questionNo) {
+		return studentMapper.selectStudentTestExampleList(questionNo);
+	}
+	
+	// 학생 시험응시 문제 리스트
+	public List<Map<String, Object>> getStruentTestQuestionList(int testNo) {
+		return studentMapper.selectStudentTestQuestionList(testNo);
+	}
 	
 	// 학생 시험 리스트 마지막페이지
 	public int testCount(String searchWord) {

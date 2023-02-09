@@ -8,7 +8,7 @@
 </head>
 <body>
 	<!-- 로그인 전 -->
-	<c:if test="${loginTeacher == null}">
+	<c:if test="${loginStudent == null}">
 		<h1>학생 로그인</h1>
 		<form method="post" action="${pageContext.request.contextPath}/loginStudent">
 			<table border="1">
@@ -26,9 +26,9 @@
 	</c:if>
 	
 	<!-- 로그인 상태 -->
-	<c:if test="${loginTeacher != null}">
+	<c:if test="${loginStudent != null}">
 		${loginStudent.studentName}님 반갑습니다.
-		<a href="${pageContext.request.contextPath}/teacher/logout">로그아웃</a>	
+		<a href="${pageContext.request.contextPath}/student/studentLogout">로그아웃</a>	
 	</c:if>
 
 </body>

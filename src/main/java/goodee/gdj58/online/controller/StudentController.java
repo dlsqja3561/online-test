@@ -12,9 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import goodee.gdj58.online.service.IdService;
 import goodee.gdj58.online.service.StudentService;
+import goodee.gdj58.online.vo.Paper;
 import goodee.gdj58.online.vo.Student;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +25,61 @@ import lombok.extern.slf4j.Slf4j;
 public class StudentController {
 	@Autowired StudentService studentService;
 	@Autowired IdService idService;
+	
+	// 학생 답안 입력
+	@PostMapping("/student/questionAnswer")
+	public String studentQuestionAnswer(HttpSession session, RedirectAttributes re
+											, @RequestParam(value="answer") int answer
+											, @RequestParam(value="questionNo") int questionNo
+											, @RequestParam(value="testNo") int testNo
+											, @RequestParam(value="testTitle") String testTitle) {
+		log.debug("\u001B[31m"+answer+" <- answer");
+		log.debug("\u001B[31m"+questionNo+" <- questionNo");
+		log.debug("\u001B[31m"+testNo+" <- testNo");
+		log.debug("\u001B[31m"+testTitle+" <- testTitle");
+		Student loginStudent = (Student)session.getAttribute("loginStudent");
+		int studentNo = loginStudent.getStudentNo();
+		Paper paper = new Paper();
+		paper.setStudentNo(studentNo);
+		paper.setQuestionNo(questionNo);
+		paper.setAnswer(answer);
+		studentService.addAnswer(paper); // paper테이블에 선택한 답안 입력
+		re.addAttribute("testNo", testNo);
+		re.addAttribute("testTitle", testTitle);
+		return "redirect:/student/studentTestQuestionList";
+	}
+	
+	// 학생 시험응시 보기 리스트
+	@GetMapping("/student/studentTestExampleList")
+	public String studentTestExampleList(Model model
+												, @RequestParam(value="questionNo") int questionNo
+												, @RequestParam(value="questionTitle") String questionTitle
+												, @RequestParam(value="testNo") int testNo
+												, @RequestParam(value="testTitle") String testTitle) {
+		log.debug("\u001B[31m"+questionNo+" <- questinoNo");
+		log.debug("\u001B[31m"+questionTitle+" <- questionTitle");
+		List<Map<String, Object>> list = studentService.getStruentTestExampleList(questionNo);
+		model.addAttribute("list", list);
+		model.addAttribute("questionTitle", questionTitle);
+		model.addAttribute("questionNo", questionNo);
+		model.addAttribute("testNo", testNo);
+		model.addAttribute("testTitle", testTitle);
+		return "student/studentTestExampleList";
+	}
+	
+	// 학생 시험응시 문제 리스트
+	@GetMapping("/student/studentTestQuestionList")
+	public String studentTestQuestionList(Model model
+												, @RequestParam(value="testNo") int testNo
+												, @RequestParam(value="testTitle") String testTitle) {
+		log.debug("\u001B[31m"+testNo+" <- testNo");
+		log.debug("\u001B[31m"+testTitle+" <- testTitle");
+		List<Map<String, Object>> list = studentService.getStruentTestQuestionList(testNo);
+		model.addAttribute("list", list);
+		model.addAttribute("testNo", testNo);
+		model.addAttribute("testTitle", testTitle);
+		return "student/studentTestQuestionList";
+	}
 	
 	// 학생 시험 리스트
 	@GetMapping("/student/studentTestList")
