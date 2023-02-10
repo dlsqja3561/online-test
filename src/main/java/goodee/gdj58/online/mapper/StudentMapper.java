@@ -6,11 +6,18 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import goodee.gdj58.online.vo.Paper;
+import goodee.gdj58.online.vo.Score;
 import goodee.gdj58.online.vo.Student;
 
 @Mapper
 public interface StudentMapper {
 
+	// 문제 정답
+	List<Map<String, Object>> selectTestAnswer(int testNo);
+	// 학생이 선택한 답
+	List<Map<String, Object>> selectStudentAnswer(Map<String, Object> paramMap);
+	// 학생 시험점수 입력
+	int insertScore(Score score);
 	// 학생 시험응시 문제 답안 입력
 	int insertAnswer(Paper paper);
 	// 학생 시험응시 보기 리스트

@@ -48,6 +48,7 @@
 		WHERE question_no = #{questionNo}
 	</delete>
 	
+	
 	<!-- 문제 제목 수정 -->
 	<update id="updateQuestionTitle" parameterType="java.util.Map">
 		UPDATE question

@@ -10,12 +10,35 @@ import org.springframework.transaction.annotation.Transactional;
 
 import goodee.gdj58.online.mapper.StudentMapper;
 import goodee.gdj58.online.vo.Paper;
+import goodee.gdj58.online.vo.Score;
 import goodee.gdj58.online.vo.Student;
 @Service
 @Transactional
 public class StudentService {
 	@Autowired
 	private StudentMapper studentMapper;
+	
+	// 문제 정답
+	public List<Map<String, Object>> getTestAnswer(int testNo) {
+		return studentMapper.selectTestAnswer(testNo);
+	}
+	
+	// 학생이 선택한 답
+	public List<Map<String, Object>> getStudentAnswer(int testNo, int studentNo) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("testNo", testNo);
+		paramMap.put("studentNo", studentNo);
+		return studentMapper.selectStudentAnswer(paramMap);
+	}
+	
+	// 학생 시험점수 입력
+	public int addScore(int testNo, int studentNo, int studentScore) {
+		Score score = new Score();
+		score.setTestNo(testNo);
+		score.setStudentNo(studentNo);
+		score.setScore(studentScore);
+		return studentMapper.insertScore(score);
+	}
 	
 	// 학생 시험응시 문제 답안 입력
 	public int addAnswer(Paper paper) {

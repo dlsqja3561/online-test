@@ -31,5 +31,6 @@
 			</tr>
 		</c:forEach>
 	</table>
+	<a href="${pageContext.request.contextPath}/student/studentTestList?click=1&testNo=${testNo}">시험종료</a>
 </body>
 </html>

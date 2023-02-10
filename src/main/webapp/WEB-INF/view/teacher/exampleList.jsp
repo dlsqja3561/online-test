@@ -16,6 +16,8 @@
 	<h1>보기 등록</h1>
 	<form method="post" action="${pageContext.request.contextPath}/teacher/addExample">
 		<input type="hidden" name="questionNo" value="${questionNo}">
+		<input type="hidden" name=questionIdx value="${questionIdx}">
+		<input type="hidden" name="questionTitle" value="${questionTitle}">
 		<table border="1">
 			<tr>
 				<td>보기번호</td>

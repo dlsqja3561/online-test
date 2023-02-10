@@ -17,6 +17,7 @@ import goodee.gdj58.online.vo.Employee;
 public class EmployeeService {
 	// DI = new EmployeeMapper()
 	@Autowired private EmployeeMapper employeeMapper;
+	@Autowired IdService idService;
 	
 	// emp 비밀번호 수정
 	public int updateEmployeePw(int empNo, String oldPw, String newPw) {

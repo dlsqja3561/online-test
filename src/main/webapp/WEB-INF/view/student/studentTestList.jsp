@@ -31,7 +31,7 @@
 						<span>미응시</span>
 					</c:if>
 					<c:if test="${e.paperAnser ne null}">
-						<a href="${pageContext.request.contextPath}/student/studentTestOne?testNo=${e.testNo}">응시완료</a>
+						<a href="${pageContext.request.contextPath}/student/studentAnswer?testNo=${e.testNo}&testTitle=${e.testTitle}">응시완료</a>
 					</c:if>
 					<!-- 날짜 비교위해 타입변경 -->
 					<fmt:formatDate var="testDate" value="${e.testDate}" pattern="yyyy-MM-dd"/>
@@ -43,7 +43,7 @@
 			</tr>
 		</c:forEach>
 	</table>
-	<form method="get" action="${pageContext.request.contextPath}/teacher/testList">
+	<form method="get" action="${pageContext.request.contextPath}/student/studentTestList">
 		<input type="text" name="searchWord">
 		<button type="submit">검색</button>
 	</form>

@@ -15,4 +15,16 @@ public class IdService {
 	public String getIdCheck(String id) {
 		return idMapper.selectIdCheck(id);
 	}
+	
+	// 중복아이디 체크 (ajax)
+	public String getIdCk(String id) {
+		// 사용가능한 ID "YES", 불가 "NO"
+		String resultStr = "NO";
+		
+		if(idMapper.selectIdCheck(id) == null) {
+			resultStr = "YES";
+		}
+		
+		return resultStr;
+	}
 }

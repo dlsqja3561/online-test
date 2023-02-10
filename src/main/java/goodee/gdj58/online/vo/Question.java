@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class Question {
-	int questionNo;
-	int testNo;
-	int questionIdx;
-	String questionTitle;
+	private int questionNo;
+	private int testNo;
+	private int questionIdx;
+	private String questionTitle;
 }

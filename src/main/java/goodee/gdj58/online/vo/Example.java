@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class Example {
-	int exampleNo;
-	int questionNo;
-	int exampleIdx;
-	String exampleTitle;
-	String exampleOx;
+	private int exampleNo;
+	private int questionNo;
+	private int exampleIdx;
+	private String exampleTitle;
+	private String exampleOx;
 }

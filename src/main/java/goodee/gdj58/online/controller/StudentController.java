@@ -26,6 +26,27 @@ public class StudentController {
 	@Autowired StudentService studentService;
 	@Autowired IdService idService;
 	
+	// 학생 답 확인
+	@GetMapping("/student/studentAnswer")
+	public String studentAnswer(HttpSession session, Model model
+															, @RequestParam(value="testNo") int testNo
+															, @RequestParam(value="testTitle") String testTitle) {
+		log.debug("\u001B[31m"+testNo+" <- testNo");
+		log.debug("\u001B[31m"+testTitle+" <- testTitle");
+		Student loginStudent = (Student)session.getAttribute("loginStudent");
+		int studentNo = loginStudent.getStudentNo();
+		// 학생 답
+		List<Map<String, Object>> answerList = studentService.getStudentAnswer(testNo, studentNo);
+		// 문제 정답
+		List<Map<String, Object>> testAnswerList = studentService.getTestAnswer(testNo);
+		model.addAttribute("testAnswerList", testAnswerList);
+		model.addAttribute("answerList", answerList);
+		model.addAttribute("testNo", testNo);
+		model.addAttribute("testTitle", testTitle);
+		return "/student/studentAnswer";
+		
+	}
+	
 	// 학생 답안 입력
 	@PostMapping("/student/questionAnswer")
 	public String studentQuestionAnswer(HttpSession session, RedirectAttributes re
@@ -83,10 +104,33 @@ public class StudentController {
 	
 	// 학생 시험 리스트
 	@GetMapping("/student/studentTestList")
-	public String studentTestList(Model model
+	public String studentTestList(Model model, HttpSession session, RedirectAttributes re
 											, @RequestParam(value="currentPage", defaultValue="1") int currentPage
 											, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage
-											, @RequestParam(value="searchWord", defaultValue="") String searchWord) {
+											, @RequestParam(value="searchWord", defaultValue="") String searchWord
+											, @RequestParam(value="click", defaultValue="0") int click
+											, @RequestParam(value="testNo", defaultValue="0") int testNo) {
+		// 학생 시험 종료후 click 값이 넘어오면 실행
+		if(click == 1) {
+			Student loginStudent = (Student)session.getAttribute("loginStudent");
+			int studentNo = loginStudent.getStudentNo();
+			List<Map<String, Object>> answerList = studentService.getStudentAnswer(testNo, studentNo);
+			// 전체 문제수, 학생 정답수
+			String oCount = answerList.get(0).get("oCount").toString();
+			String qCount = answerList.get(0).get("questionCount").toString();
+			int answerCount = Integer.parseInt(oCount); 
+			int questionCount = Integer.parseInt(qCount); 
+			log.debug("\u001B[31m"+answerCount+" <- answerCount");
+			log.debug("\u001B[31m"+questionCount+" <- questionCount");
+			// 학생 시험점수
+			int totalScore  = 100;
+			int studentScore = totalScore / questionCount * answerCount;
+			log.debug("\u001B[31m"+studentScore+" <- studentScore");
+			studentService.addScore(testNo, studentNo, studentScore);
+			log.debug("\u001B[31m"+" addScore");
+		}
+		
+		
 		int Count = studentService.studentCount(searchWord);
 		int lastPage = Count / rowPerPage;
 		if(Count % rowPerPage != 0) {

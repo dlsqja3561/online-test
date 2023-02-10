@@ -3,8 +3,8 @@ package goodee.gdj58.online.vo;
 import lombok.Data;
 
 @Data
-public class Test {
+public class Score {
 	private int testNo;
-	private String testTitle;
-	private String testDate;
+	private int studentNo;
+	private int score;
 }

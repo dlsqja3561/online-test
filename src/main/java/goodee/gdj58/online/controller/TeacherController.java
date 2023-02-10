@@ -66,15 +66,21 @@ public class TeacherController {
 	@PostMapping("/teacher/addExample")
 	public String addExample(Model model, RedirectAttributes re
 											, @RequestParam(value="questionNo") int questionNo
+											, @RequestParam(value="questionTitle") String questionTitle
+											, @RequestParam(value="exampleIdx") int questionIdx
 											, @RequestParam(value="exampleIdx") int exampleIdx
 											, @RequestParam(value="exampleTitle") String exampleTitle
 											, @RequestParam(value="exampleOx") String exampleOx) {
 		log.debug("\u001B[31m"+questionNo+" <- questionNo");
+		log.debug("\u001B[31m"+questionTitle+" <- questionTitle");
+		log.debug("\u001B[31m"+questionIdx+" <- questionIdx");
 		log.debug("\u001B[31m"+exampleIdx+" <- exampleIdx");
 		log.debug("\u001B[31m"+exampleTitle+" <- exampleTitle");
 		log.debug("\u001B[31m"+exampleOx+" <- exampleOx");
 		teacherService.addExample(questionNo, exampleIdx, exampleTitle, exampleOx);
 		re.addAttribute("questionNo", questionNo);
+		re.addAttribute("questionIdx", questionIdx);
+		re.addAttribute("questionTitle", questionTitle);
 		return "redirect:/teacher/exampleList";
 	}
 	

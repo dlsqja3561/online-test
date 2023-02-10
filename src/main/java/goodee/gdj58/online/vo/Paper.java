@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class Paper {
-	int paperNo;
-	int studentNo;
-	int questionNo;
-	int answer;
+	private int paperNo;
+	private int studentNo;
+	private int questionNo;
+	private int answer;
 }
