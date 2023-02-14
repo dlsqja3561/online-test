@@ -23,6 +23,8 @@
 			</table>
 		<button type="submit">로그인</button>
 		</form>
+		<a href="${pageContext.request.contextPath}/loginEmp">직원로그인</a>
+		<a href="${pageContext.request.contextPath}/loginTeacher">강사로그인</a>
 	</c:if>
 	
 	<!-- 로그인 상태 -->

@@ -2,6 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="goodee.gdj58.online.mapper.StudentMapper">
 
+	<!-- 전체 시험 점수 평균 -->
+	<select id="selectTestAllAvg" resultType="java.util.Map">
+		SELECT COUNT(t.testNo) AllTestCount
+				, ROUND(AVG(t.score)) AllScoreAvg
+		FROM (SELECT test_no testNo
+						, student_no studentNo
+						, score
+				FROM score) t
+	</select>
+	
+	<!-- 로그인 학생 점수 평균 -->
+	<select id="selectTestOneAvg" parameterType="int" resultType="java.util.Map">
+		SELECT COUNT(t.testNo) testCount
+				, ROUND(AVG(t.score)) scoreAvg
+		FROM (SELECT test_no testNo
+						, student_no studentNo
+						, score
+				FROM score) t
+		WHERE t.studentNo = #{studentNo}
+	</select>
+	
 	<!-- 문제 정답 -->
 	<select id="selectTestAnswer" parameterType="int" resultType="java.util.Map">
 		SELECT t.test_no testNo
@@ -16,7 +37,8 @@
 	
 	<!-- 학생이 선택한 답 -->
 	<select id="selectStudentAnswer" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT t.test_title testTitle
+		SELECT t.test_no testNo
+				, t.test_title testTitle
 				, qu.question_no questionNo
 				, qu.question_idx questionIdx
 				, qu.question_title questionTitle
@@ -24,14 +46,14 @@
 				, pa.answer answer
 				, ex.example_title exampleTitle
 				, ex.example_ox exampleOx
-				, sc.score scoreCk
-				, SUM(COUNT(case when ex.example_ox = '정답' then 1 END)) OVER() oCount
+				, COUNT(case when ex.example_ox = '정답' then 1 END) OVER() oCount
 				, COUNT(qu.question_no) OVER() questionCount
+				, sc.score scoreCk
 		FROM test t 
 			INNER JOIN question qu ON t.test_no = qu.test_no
-			INNER JOIN paper pa ON qu.question_no = pa.question_no
 			INNER JOIN example ex ON qu.question_no = ex.question_no
-			LEFT OUTER JOIN score sc ON t.test_no = sc.test_no
+			INNER JOIN paper pa ON ex.question_no = pa.question_no
+			INNER JOIN score sc ON pa.student_no = sc.student_no AND t.test_no = sc.test_no
 		WHERE t.test_no = #{testNo} AND pa.student_no = #{studentNo} AND pa.answer = ex.example_idx
 		GROUP BY questionNo
 		ORDER BY questionIdx ASC
@@ -76,14 +98,12 @@
 	
 	<!-- 학생 시험응시 문제 리스트 -->
 	<select id="selectStudentTestQuestionList" parameterType="int" resultType="java.util.Map">
-		SELECT qu.question_no questionNo
-				, qu.question_idx questionIdx
-				, qu.question_title questionTitle
-				, pa.answer answerCk
-		FROM question qu
-			LEFT OUTER JOIN paper pa ON qu.question_no = pa.question_no
-		WHERE qu.test_no = #{testNo}
-		ORDER BY questionIdx
+		SELECT question_no questionNo
+				, question_idx questionIdx
+				, question_title questionTitle
+		FROM question 
+		WHERE test_no = #{testNo}
+		ORDER BY questionIdx ASC
 	</select>
 
 	<!-- 학생 시험 리스트 마지막페이지 -->
@@ -102,7 +122,6 @@
 				, t.test_title testTitle
 				, t.test_date testDate
 				, q.question_no questionNo
-				, pa.answer paperAnser
 		FROM test t 
 			LEFT OUTER JOIN question q ON t.test_no = q.test_no
 			LEFT OUTER JOIN paper pa ON q.question_no = pa.question_no

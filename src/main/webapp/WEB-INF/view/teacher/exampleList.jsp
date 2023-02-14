@@ -18,6 +18,7 @@
 		<input type="hidden" name="questionNo" value="${questionNo}">
 		<input type="hidden" name=questionIdx value="${questionIdx}">
 		<input type="hidden" name="questionTitle" value="${questionTitle}">
+		<input type="hidden" name="testNo" value="${testNo}">
 		<table border="1">
 			<tr>
 				<td>보기번호</td>
@@ -37,7 +38,7 @@
 		</table>
 		<button type="submit">보기등록</button>
 	</form>
-	
+	<a href="${pageContext.request.contextPath}/teacher/questionList?testNo=${testNo}">보기등록완료</a>
 	<!-- 보기 리스트 -->
 	<h1>보기 리스트</h1>
 	<p><strong>문제 - ${questionIdx}. ${questionTitle}</strong></p>

@@ -27,12 +27,10 @@
 				<td>${e.testDate}</td>
 				<td>
 					<!-- 응시현황 -->
-					<c:if test="${e.paperAnser eq null}">
-						<span>미응시</span>
-					</c:if>
-					<c:if test="${e.paperAnser ne null}">
-						<a href="${pageContext.request.contextPath}/student/studentAnswer?testNo=${e.testNo}&testTitle=${e.testTitle}">응시완료</a>
-					</c:if>
+
+
+						<a href="${pageContext.request.contextPath}/student/studentAnswer?testNo=${e.testNo}&testTitle=${e.testTitle}">응시완료확인</a>
+
 					<!-- 날짜 비교위해 타입변경 -->
 					<fmt:formatDate var="testDate" value="${e.testDate}" pattern="yyyy-MM-dd"/>
 					<c:if test="${testDate == date && e.paperAnser eq null}">
@@ -49,29 +47,29 @@
 	</form>
 	<div>
 		<!-- 처음으로 -->
-		<a href="${pageContext.request.contextPath}/teacher/testList?currentPage=1&searchWord=${searchWord}">처음</a>
+		<a href="${pageContext.request.contextPath}/student/studentTestList?currentPage=1&searchWord=${searchWord}">처음</a>
 		<!-- 1페이지에서 이전버튼클릭시 -->
 		<c:if test="${currentPage <= 1}">
-			<a href="${pageContext.request.contextPath}/teacher/testList?currentPage=1&searchWord=${searchWord}">이전</a>
+			<a href="${pageContext.request.contextPath}/student/studentTestList?currentPage=1&searchWord=${searchWord}">이전</a>
 		</c:if>
 		<!-- 이전페이지 -->
 		<c:if test="${currentPage > 1}">
-			<a href="${pageContext.request.contextPath}/teacher/testList?currentPage=${currentPage-1}&searchWord=${searchWord}">이전</a>
+			<a href="${pageContext.request.contextPath}/student/studentTestList?currentPage=${currentPage-1}&searchWord=${searchWord}">이전</a>
 		</c:if>
 		<!-- startPage ~ endPage -->
 		<c:forEach var="s" begin="${startPage}" end="${endPage}" step="1">
-			<a href="${pageContext.request.contextPath}/teacher/testList?currentPage=${s}&searchWord=${searchWord}">${s}</a>
+			<a href="${pageContext.request.contextPath}/student/studentTestList?currentPage=${s}&searchWord=${searchWord}">${s}</a>
 		</c:forEach>
 		<!-- 다음페이지 -->
 		<c:if test="${currentPage < lastPage}">
-			<a href="${pageContext.request.contextPath}/teacher/testList?currentPage=${currentPage+1}&searchWord=${searchWord}">다음</a>
+			<a href="${pageContext.request.contextPath}/student/studentTestList?currentPage=${currentPage+1}&searchWord=${searchWord}">다음</a>
 		</c:if>
 		<!-- 마지막페이지에서 다음버튼클릭시 -->
 		<c:if test="${currentPage >= lastPage}">
-			<a href="${pageContext.request.contextPath}/teacher/testList?currentPage=${lastPage}&searchWord=${searchWord}">다음</a>
+			<a href="${pageContext.request.contextPath}/student/studentTestList?currentPage=${lastPage}&searchWord=${searchWord}">다음</a>
 		</c:if>
 		<!-- 마지막으로 -->
-		<a href="${pageContext.request.contextPath}/teacher/testList?currentPage=${lastPage}&searchWord=${searchWord}">마지막</a>
+		<a href="${pageContext.request.contextPath}/student/studentTestList?currentPage=${lastPage}&searchWord=${searchWord}">마지막</a>
 	</div>
 </body>
 </html>

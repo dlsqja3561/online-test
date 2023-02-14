@@ -18,6 +18,16 @@ public class StudentService {
 	@Autowired
 	private StudentMapper studentMapper;
 	
+	// 전체 학생 시험 점수 평균
+	public Map<String, Object> getTestAllAvg() {
+		return studentMapper.selectTestAllAvg();
+	}
+	
+	// 로그인 학생 점수 평균
+	public Map<String, Object> getTestOneAvg(int studentNo) {
+		return studentMapper.selectTestOneAvg(studentNo);
+	}
+	
 	// 문제 정답
 	public List<Map<String, Object>> getTestAnswer(int testNo) {
 		return studentMapper.selectTestAnswer(testNo);

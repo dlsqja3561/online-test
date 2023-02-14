@@ -25,8 +25,7 @@
 				<td>${e.questionIdx}</td>
 				<td><a href="${pageContext.request.contextPath}/student/studentTestExampleList?questionNo=${e.questionNo}&questionTitle=${e.questionTitle}&testNo=${testNo}&testTitle=${testTitle}">${e.questionTitle}</a></td>
 				<td>
-					<c:if test="${e.answerCk ne null}">입력완료</c:if>
-					<c:if test="${e.answerCk eq null}">X</c:if>
+					<c:if test=""></c:if>
 				</td>
 			</tr>
 		</c:forEach>

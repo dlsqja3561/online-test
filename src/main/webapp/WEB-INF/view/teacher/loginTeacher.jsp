@@ -23,12 +23,14 @@
 			</table>
 		<button type="submit">로그인</button>
 		</form>
+		<a href="${pageContext.request.contextPath}/loginEmp">직원로그인</a>
+		<a href="${pageContext.request.contextPath}/loginStudent">학생로그인</a>
 	</c:if>
 	
 	<!-- 로그인 상태 -->
 	<c:if test="${loginTeacher != null}">
 		${loginTeacher.teacherName}님 반갑습니다.
-		<a href="${pageContext.request.contextPath}/teacher/logout">로그아웃</a>	
+		<a href="${pageContext.request.contextPath}/teacher/teacherLogout">로그아웃</a>	
 	</c:if>
 
 </body>

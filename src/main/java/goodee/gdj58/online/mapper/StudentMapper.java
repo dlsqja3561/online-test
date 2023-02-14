@@ -11,7 +11,11 @@ import goodee.gdj58.online.vo.Student;
 
 @Mapper
 public interface StudentMapper {
-
+	
+	// 전체 시험 점수 평균
+	Map<String, Object> selectTestAllAvg();
+	// 로그인 학생 점수 평균
+	Map<String, Object> selectTestOneAvg(int studentNo);
 	// 문제 정답
 	List<Map<String, Object>> selectTestAnswer(int testNo);
 	// 학생이 선택한 답

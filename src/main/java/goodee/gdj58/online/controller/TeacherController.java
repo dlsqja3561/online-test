@@ -70,7 +70,8 @@ public class TeacherController {
 											, @RequestParam(value="exampleIdx") int questionIdx
 											, @RequestParam(value="exampleIdx") int exampleIdx
 											, @RequestParam(value="exampleTitle") String exampleTitle
-											, @RequestParam(value="exampleOx") String exampleOx) {
+											, @RequestParam(value="exampleOx") String exampleOx
+											, @RequestParam(value="testNo") int testNo) {
 		log.debug("\u001B[31m"+questionNo+" <- questionNo");
 		log.debug("\u001B[31m"+questionTitle+" <- questionTitle");
 		log.debug("\u001B[31m"+questionIdx+" <- questionIdx");
@@ -81,6 +82,7 @@ public class TeacherController {
 		re.addAttribute("questionNo", questionNo);
 		re.addAttribute("questionIdx", questionIdx);
 		re.addAttribute("questionTitle", questionTitle);
+		re.addAttribute("testNo", testNo);
 		return "redirect:/teacher/exampleList";
 	}
 	
@@ -89,13 +91,15 @@ public class TeacherController {
 	public String ExampleList(Model model
 								, @RequestParam(value="questionNo") int questionNo
 								, @RequestParam(value="questionTitle") String questionTitle
-								, @RequestParam(value="questionIdx") int questionIdx) {
+								, @RequestParam(value="questionIdx") int questionIdx
+								, @RequestParam(value="testNo") int testNo) {
 		log.debug("\u001B[31m"+"/teacher/exampleList");
 		List<Map<String, Object>> list = teacherService.getExampleList(questionNo);
 		model.addAttribute("list", list);
 		model.addAttribute("questionNo", questionNo);
 		model.addAttribute("questionTitle", questionTitle);
 		model.addAttribute("questionIdx", questionIdx);
+		model.addAttribute("testNo", testNo);
 		return "teacher/exampleList";
 	}
 	

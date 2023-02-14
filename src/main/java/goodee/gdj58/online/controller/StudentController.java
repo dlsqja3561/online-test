@@ -1,6 +1,7 @@
 package goodee.gdj58.online.controller;
 
 import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,20 @@ import lombok.extern.slf4j.Slf4j;
 public class StudentController {
 	@Autowired StudentService studentService;
 	@Autowired IdService idService;
+	
+	// 시험점수 평균 확인
+	@GetMapping("/student/studentAvg")
+	public String studentAvg(HttpSession session, Model model) {
+		Student loginStudent = (Student)session.getAttribute("loginStudent");
+		int studentNo = loginStudent.getStudentNo();
+		// 로그인 학생 점수 평균
+		Map<String, Object> oneMap = studentService.getTestOneAvg(studentNo);
+		// 전체 학생 점수 평균
+		Map<String, Object> allMap = studentService.getTestAllAvg();
+		model.addAttribute("oneMap", oneMap);
+		model.addAttribute("allMap", allMap);
+		return "/student/studentAvg";
+	}
 	
 	// 학생 답 확인
 	@GetMapping("/student/studentAnswer")
@@ -106,7 +121,7 @@ public class StudentController {
 	@GetMapping("/student/studentTestList")
 	public String studentTestList(Model model, HttpSession session, RedirectAttributes re
 											, @RequestParam(value="currentPage", defaultValue="1") int currentPage
-											, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage
+											, @RequestParam(value="rowPerPage", defaultValue="5") int rowPerPage
 											, @RequestParam(value="searchWord", defaultValue="") String searchWord
 											, @RequestParam(value="click", defaultValue="0") int click
 											, @RequestParam(value="testNo", defaultValue="0") int testNo) {

@@ -40,7 +40,7 @@
 		<c:forEach var="e" items="${list}">
 			<tr>
 				<td>${e.questionIdx}</td>
-				<td><a href="${pageContext.request.contextPath}/teacher/exampleList?questionNo=${e.questionNo}&questionTitle=${e.questionTitle}&questionIdx=${e.questionIdx}">${e.questionTitle}</a></td>
+				<td><a href="${pageContext.request.contextPath}/teacher/exampleList?questionNo=${e.questionNo}&questionTitle=${e.questionTitle}&questionIdx=${e.questionIdx}&testNo=${testNo}">${e.questionTitle}</a></td>
 				<td>
 					<!-- 보기가 등록되어 있으면 삭제버튼 안보이게 -->
 					<c:if test="${e.exampleCk eq null}">
