@@ -14,11 +14,11 @@
 			<table border="1">
 				<tr>
 					<td>empId</td>
-					<td><input type="text" name="empId"></td>
+					<td><input type="text" name="empId" value="admin"></td>
 				</tr>
 				<tr>
 					<td>empPw</td>
-					<td><input type="password" name="empPw"></td>
+					<td><input type="password" name="empPw" value="1234"></td>
 				</tr>
 	
 			</table>

@@ -50,6 +50,14 @@ public class StudentService {
 		return studentMapper.insertScore(score);
 	}
 	
+	// 학생 시험응시 문제 답안 입력 수
+	public int getAddAnswerCount(int testNo, int studentNo) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("testNo", testNo);
+		paramMap.put("studentNo", studentNo);
+		return studentMapper.selectInsertAnswerCount(paramMap);
+	}
+	
 	// 학생 시험응시 문제 답안 입력
 	public int addAnswer(Paper paper) {
 		return studentMapper.insertAnswer(paper);
@@ -71,9 +79,10 @@ public class StudentService {
 	}
 	
 	// 학생 시험 리스트
-	public List<Map<String, Object>> getStudentTestList(int currentPage, int rowPerPage, String searchWord) {
+	public List<Map<String, Object>> getStudentTestList(int studentNo, int currentPage, int rowPerPage, String searchWord) {
 		int beginRow = (currentPage - 1) * rowPerPage;
 		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("studentNo", studentNo);
 		paramMap.put("beginRow", beginRow);
 		paramMap.put("rowPerPage", rowPerPage);
 		paramMap.put("searchWord", searchWord);
@@ -103,7 +112,7 @@ public class StudentService {
 		return studentMapper.insertStudent(student);
 	}
 	
-	// 마지막페이지
+	// 학생 리스트 마지막페이지
 	public int studentCount(String searchWord) {
 		return studentMapper.studentCount(searchWord);
 	}

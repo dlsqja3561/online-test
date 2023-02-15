@@ -22,6 +22,8 @@ public interface StudentMapper {
 	List<Map<String, Object>> selectStudentAnswer(Map<String, Object> paramMap);
 	// 학생 시험점수 입력
 	int insertScore(Score score);
+	// 학생 시험응시 문제 답안 입력 수
+	int selectInsertAnswerCount(Map<String, Object> paramMap);
 	// 학생 시험응시 문제 답안 입력
 	int insertAnswer(Paper paper);
 	// 학생 시험응시 보기 리스트

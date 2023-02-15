@@ -27,13 +27,15 @@
 				<td>${e.testDate}</td>
 				<td>
 					<!-- 응시현황 -->
-
-
-						<a href="${pageContext.request.contextPath}/student/studentAnswer?testNo=${e.testNo}&testTitle=${e.testTitle}">응시완료확인</a>
-
+					<c:if test="${e.score eq null}">
+						<span>미응시</span>
+					</c:if>
+					<c:if test="${e.score ne null}">
+						<a href="${pageContext.request.contextPath}/student/studentAnswer?testNo=${e.testNo}&testTitle=${e.testTitle}">정답확인</a>
+					</c:if>
 					<!-- 날짜 비교위해 타입변경 -->
 					<fmt:formatDate var="testDate" value="${e.testDate}" pattern="yyyy-MM-dd"/>
-					<c:if test="${testDate == date && e.paperAnser eq null}">
+					<c:if test="${testDate == date && e.score eq null}">
 						<a href="${pageContext.request.contextPath}/student/studentTestQuestionList?testNo=${e.testNo}&testTitle=${e.testTitle}">응시하기</a>
 					</c:if>
 					<a href="${pageContext.request.contextPath}/student/studentTestQuestionList?testNo=${e.testNo}&testTitle=${e.testTitle}">응시하기</a>

@@ -105,13 +105,17 @@ public class StudentController {
 	
 	// 학생 시험응시 문제 리스트
 	@GetMapping("/student/studentTestQuestionList")
-	public String studentTestQuestionList(Model model
+	public String studentTestQuestionList(Model model, HttpSession session
 												, @RequestParam(value="testNo") int testNo
 												, @RequestParam(value="testTitle") String testTitle) {
 		log.debug("\u001B[31m"+testNo+" <- testNo");
 		log.debug("\u001B[31m"+testTitle+" <- testTitle");
+		Student loginStudent = (Student)session.getAttribute("loginStudent");
+		int studentNo = loginStudent.getStudentNo();
+		int count = studentService.getAddAnswerCount(testNo, studentNo);
 		List<Map<String, Object>> list = studentService.getStruentTestQuestionList(testNo);
 		model.addAttribute("list", list);
+		model.addAttribute("count", count);
 		model.addAttribute("testNo", testNo);
 		model.addAttribute("testTitle", testTitle);
 		return "student/studentTestQuestionList";
@@ -121,14 +125,14 @@ public class StudentController {
 	@GetMapping("/student/studentTestList")
 	public String studentTestList(Model model, HttpSession session, RedirectAttributes re
 											, @RequestParam(value="currentPage", defaultValue="1") int currentPage
-											, @RequestParam(value="rowPerPage", defaultValue="5") int rowPerPage
+											, @RequestParam(value="rowPerPage", defaultValue="10") int rowPerPage
 											, @RequestParam(value="searchWord", defaultValue="") String searchWord
 											, @RequestParam(value="click", defaultValue="0") int click
 											, @RequestParam(value="testNo", defaultValue="0") int testNo) {
-		// 학생 시험 종료후 click 값이 넘어오면 실행
+		Student loginStudent = (Student)session.getAttribute("loginStudent");
+		int studentNo = loginStudent.getStudentNo();
+		// 학생 시험 종료후 click 값이 넘어오면 시험점수 입력 실행
 		if(click == 1) {
-			Student loginStudent = (Student)session.getAttribute("loginStudent");
-			int studentNo = loginStudent.getStudentNo();
 			List<Map<String, Object>> answerList = studentService.getStudentAnswer(testNo, studentNo);
 			// 전체 문제수, 학생 정답수
 			String oCount = answerList.get(0).get("oCount").toString();
@@ -146,7 +150,7 @@ public class StudentController {
 		}
 		
 		
-		int Count = studentService.studentCount(searchWord);
+		int Count = studentService.testCount(searchWord);
 		int lastPage = Count / rowPerPage;
 		if(Count % rowPerPage != 0) {
 			lastPage +=1;
@@ -170,7 +174,7 @@ public class StudentController {
 		log.debug("\u001B[31m"+endPage+" <- endPage");
 		log.debug("\u001B[31m"+date+" <- date");
 		// 리스트
-		List<Map<String, Object>> list = studentService.getStudentTestList(currentPage, rowPerPage, searchWord);
+		List<Map<String, Object>> list = studentService.getStudentTestList(studentNo, currentPage, rowPerPage, searchWord);
 		model.addAttribute("list", list);
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("lastPage", lastPage);

@@ -53,7 +53,7 @@
 			INNER JOIN question qu ON t.test_no = qu.test_no
 			INNER JOIN example ex ON qu.question_no = ex.question_no
 			INNER JOIN paper pa ON ex.question_no = pa.question_no
-			INNER JOIN score sc ON pa.student_no = sc.student_no AND t.test_no = sc.test_no
+			LEFT OUTER JOIN score sc ON pa.student_no = sc.student_no AND t.test_no = sc.test_no
 		WHERE t.test_no = #{testNo} AND pa.student_no = #{studentNo} AND pa.answer = ex.example_idx
 		GROUP BY questionNo
 		ORDER BY questionIdx ASC
@@ -71,6 +71,15 @@
 			, #{score}
 		)
 	</insert>
+
+	<!-- 학생 시험응시 문제 답안 입력 수 -->
+	<select id="selectInsertAnswerCount" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*)
+		FROM test t 
+			INNER JOIN question qu ON t.test_no = qu.test_no
+			INNER JOIN paper pa ON qu.question_no = pa.question_no
+		WHERE t.test_no = #{testNo} AND pa.student_no = #{studentNo}
+	</select>
 
 	<!-- 학생 시험응시 문제 답안 입력 -->
 	<insert id="insertAnswer" parameterType="goodee.gdj58.online.vo.Paper">
@@ -116,7 +125,7 @@
 		</where>
 	</select>
 
-	<!-- 학생 시험 리스트 -->
+	<!-- 학생 시험 리스트 
 	<select id="selectStudentTestList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT t.test_no testNo
 				, t.test_title testTitle
@@ -133,6 +142,30 @@
 		GROUP BY testNo
 		ORDER BY t.test_no DESC
 		LIMIT #{beginRow}, #{rowPerPage}
+	</select>-->
+	<!-- 학생 시험 리스트 -->
+	<select id="selectStudentTestList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT h.questionNo questionNo
+				, h.score score
+				, h.testNo paperTtestNo
+				, t.test_no testNo
+				, t.test_title testTitle
+				, t.test_date testDate
+		FROM (SELECT q.question_no questionNo
+						, sc.score score
+						, q.test_no testNo
+				FROM question q 
+					LEFT OUTER JOIN paper pa ON q.question_no = pa.question_no
+					LEFT OUTER JOIN score sc ON pa.student_no = sc.student_no 
+				WHERE pa.student_no = #{studentNo}) h 
+			RIGHT OUTER JOIN test t ON h.testNo = t.test_no
+		<where>
+			<if test="searcWord != null || searchWord != ''">
+				test_title LIKE CONCAT('%',#{searchWord},'%')
+			</if>
+		</where>
+		GROUP BY t.test_no
+		ORDER BY t.test_no DESC
 	</select>
 	
 	<!-- 학생 비밀번호 수정 -->

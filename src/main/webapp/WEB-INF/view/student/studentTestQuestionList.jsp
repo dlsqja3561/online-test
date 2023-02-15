@@ -20,12 +20,13 @@
 			<th>문제</th>
 			<th>응시현황</th>
 		</tr>
-		<c:forEach var="e" items="${list}">
+		<c:forEach var="e" items="${list}" varStatus="status">
 			<tr>
 				<td>${e.questionIdx}</td>
 				<td><a href="${pageContext.request.contextPath}/student/studentTestExampleList?questionNo=${e.questionNo}&questionTitle=${e.questionTitle}&testNo=${testNo}&testTitle=${testTitle}">${e.questionTitle}</a></td>
 				<td>
-					<c:if test=""></c:if>
+					<c:if test="${status.count <= count}">선택완료</c:if>
+					<c:if test="${status.count > count}">X</c:if>
 				</td>
 			</tr>
 		</c:forEach>
