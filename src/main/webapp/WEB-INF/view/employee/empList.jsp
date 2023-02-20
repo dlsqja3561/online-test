@@ -8,7 +8,6 @@
 <title>empList</title>
 </head>
 <body>
-
 	<!-- Page Wrapper -->
     <div id="wrapper">
         <!-- sidebar include -->
@@ -38,7 +37,7 @@
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body text-center">
-                                   	<table class="table table-bordered col-md-20" >
+                                   	<table class="table table-bordered col-md-20">
 										<tr>
 											<th>empId</th>
 											<th>empName</th>
