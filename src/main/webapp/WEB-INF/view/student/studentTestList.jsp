@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="row">
-                        <!-- 관리자 리스트 -->
+                        <!-- 시험 리스트 -->
                         <div class="col-xl-10 col-lg-7">
                             <div class="card shadow mb-4">
                                 <!-- Card Header -->

@@ -39,6 +39,7 @@
                                 <div class="card-body text-center">
                                    	<table class="table table-bordered col-md-20">
 										<tr>
+										
 											<th>empId</th>
 											<th>empName</th>
 											<th>삭제</th>
@@ -53,7 +54,7 @@
 									</table>
 									<!-- 검색창 -->
 									<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
-									 method="get" action="${pageContext.request.contextPath}/employee/empList">
+										method="get" action="${pageContext.request.contextPath}/employee/empList">
 										<div class="input-group">
 											<input type="text" name="searchWord" class="form-control bg-light border-0 small" placeholder="Search for Name"
 												aria-label="Search" aria-describedby="basic-addon2">
